@@ -85,7 +85,6 @@ def pipeline(documents=None):
     chain = create_conversational_chain(llm, retriever, prompt, contextualize_q_prompt) if retriever else llm
     return chain
 
-
 def invoke_llm(chain, user_input:str, messages):
     history=[]
     
@@ -98,7 +97,7 @@ def invoke_llm(chain, user_input:str, messages):
             history.append(system_response)
 
     try:
-        if chain.model == "models/gemini-1.5-flash":
+        if hasattr(chain,'model') and chain.model == "models/gemini-1.5-flash":
             llm_convo = deepcopy(history)
             llm_convo.append(user_input)
             response = chain.invoke(llm_convo)
