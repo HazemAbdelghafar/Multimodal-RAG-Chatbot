@@ -104,11 +104,14 @@ if page == "Chat with Documents":
                 st.session_state.messages.append({"role": "user", "content": user_input})
             if response and response.strip():
                 st.session_state.messages.append({"role": "bot", "content": response})
-
-            # TTS Button
-            if response:
+        # Display response and TTS button
+        if st.session_state.messages:
+            # Get the last bot response
+            last_response = next((msg["content"] for msg in reversed(st.session_state.messages) if msg["role"] == "bot"), None)
+            if last_response:
+                # Add TTS button to read the last response aloud
                 if st.button("🔊", help="Read response aloud"):
-                    speak_text(response)
+                    speak_text(last_response)
 
         # Display conversation history
         st.markdown("### Conversation History")
@@ -129,7 +132,7 @@ elif page == "Visual Question Answering":
         try:
             # Load and display the image
             image = Image.open(image_file)
-            st.image(image, caption="Uploaded Image", use_container_width=True)
+            st.image(image, caption="Uploaded Image", width=500)
             
             # Accept a question about the image
             visual_question = st.text_input("Ask a question about the image:")
