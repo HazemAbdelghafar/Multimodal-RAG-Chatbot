@@ -5,7 +5,6 @@ import streamlit as st
 from llm_module import pipeline, invoke_llm
 from audio_module import recognize_speech_from_mic, speak_text
 from cv_module import initialize_visual_answering, invoke_visual
-from transformers import BlipProcessor, BlipForQuestionAnswering
 from langchain_community.document_loaders import PyPDFLoader, CSVLoader
 
 
@@ -81,16 +80,18 @@ if page == "Chat with Documents":
     if chain:
         # Create columns for microphone button and input
         col1, col2 = st.columns([1, 9])
+        listener = st.empty()
         # Microphone Button
         with col1:
             if st.button("🎤", help="Use microphone input"):
-                st.write("Listening...")
+                listener.write("Listening...")
                 recognized_text = recognize_speech_from_mic()
                 if recognized_text and recognized_text.strip():
                     st.session_state.user_input = recognized_text
                 else:
                     user_input = None
                     st.session_state.user_input = None
+                listener.empty()
 
         # Input Field
         with col2:
