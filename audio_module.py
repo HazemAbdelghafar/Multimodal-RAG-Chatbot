@@ -1,7 +1,7 @@
-import speech_recognition as sr
 import pygame
 from io import BytesIO
 from gtts import gTTS
+import speech_recognition as sr
 
 def recognize_speech_from_mic(timeout=5, phrase_time_limit=10):
     """Listen to microphone input and return recognized speech."""
@@ -28,7 +28,9 @@ def recognize_speech_from_mic(timeout=5, phrase_time_limit=10):
             print(f"Could not request results from Google Speech Recognition service; {e}")
 
         
-def speak_text(text):
+def speak_text(text:str):
+    text = text.replace("\n", " ")
+    text = text.replace("*", "")
     tts = gTTS(text)
     fp = BytesIO()
     tts.write_to_fp(fp)
